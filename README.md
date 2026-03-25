@@ -1,4 +1,4 @@
-# widget_test_helper
+# widget_test_kit
 
 Declarative, readable widget-testing helpers for Flutter.
 
@@ -52,14 +52,14 @@ Add the package to your `dev_dependencies`:
 
 ```yaml
 dev_dependencies:
-  widget_test_helper:
-    path: ../widget_test_helper  # or from pub once published
+  widget_test_kit:
+    path: ../widget_test_kit  # or from pub once published
 ```
 
 Then import:
 
 ```dart
-import 'package:widget_test_helper/widget_test_helper.dart';
+import 'package:widget_test_kit/widget_test_kit.dart';
 ```
 
 ## API Overview

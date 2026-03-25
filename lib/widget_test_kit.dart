@@ -1,7 +1,7 @@
 /// Declarative, readable widget-testing helpers for Flutter.
 ///
 /// ```dart
-/// import 'package:widget_test_helper/widget_test_helper.dart';
+/// import 'package:widget_test_kit/widget_test_kit.dart';
 ///
 /// testWidgets('login form', (tester) async {
 ///   await tester.pumpWidget(TestApp(child: LoginForm()));

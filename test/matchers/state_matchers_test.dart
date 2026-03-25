@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:widget_test_helper/widget_test_helper.dart';
+import 'package:widget_test_kit/widget_test_kit.dart';
 
 void main() {
   // ---------------------------------------------------------------------------
