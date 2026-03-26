@@ -7,6 +7,7 @@ issue_tracker: https://github.com/KareemMuhammad/widget_test_kit/issues
 topics:
   - testing
   - widget-testing
+  - unit-testing
   - flutter
 
 environment:

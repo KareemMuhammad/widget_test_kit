@@ -1,4 +1,4 @@
-## 0.0.1
+## 0.0.2
 
 * Initial release.
 * **TestApp** – minimal `MaterialApp` + `Scaffold` wrapper for widget tests.
