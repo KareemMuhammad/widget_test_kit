@@ -52,8 +52,7 @@ Add the package to your `dev_dependencies`:
 
 ```yaml
 dev_dependencies:
-  widget_test_kit:
-    path: ../widget_test_kit  # or from pub once published
+  widget_test_kit: ^0.0.1
 ```
 
 Then import:
