@@ -52,7 +52,7 @@ Add the package to your `dev_dependencies`:
 
 ```yaml
 dev_dependencies:
-  widget_test_kit: ^0.0.2
+  widget_test_kit: ^0.1.0
 ```
 
 Then import:
@@ -104,6 +104,15 @@ await tester.expectThatEventually(
 );
 ```
 
+#### `not()` — negate any matcher
+
+```dart
+tester.expectThat(
+  find.byType(ElevatedButton),
+  matchers: [not(toBeDisabled())],
+);
+```
+
 ### Form Extensions
 
 ```dart
@@ -135,12 +144,94 @@ await tester.completeForm(
 );
 ```
 
+### Navigation Extensions
+
+```dart
+// Push a named route
+await tester.navigateTo('/settings');
+
+// Pop the current route
+await tester.goBack();
+
+// Assert current route
+tester.expectRoute('/home');
+
+// Dialog assertions
+tester.expectDialog();
+tester.expectNoDialog();
+await tester.dismissDialog();
+
+// Bottom sheet assertion
+tester.expectBottomSheet();
+
+// SnackBar assertion (with optional text check)
+tester.expectSnackBar(withText: 'Saved!');
+```
+
+### Gesture Extensions
+
+```dart
+// Swipe gestures
+await tester.swipeLeft(find.byType(Dismissible));
+await tester.swipeRight(find.byType(PageView));
+await tester.swipeUp(find.byType(BottomSheet));
+await tester.swipeDown(find.byType(RefreshIndicator));
+
+// Tap variants
+await tester.longPressOn(find.byKey(Key('item')));
+await tester.doubleTapOn(find.text('word'));
+
+// Slider manipulation
+await tester.dragSliderTo(find.byType(Slider), 0.75);
+
+// Scroll until a widget appears
+await tester.scrollUntilFound(find.text('Item 99'));
+
+// Pull to refresh
+await tester.pullToRefresh(find.byType(RefreshIndicator));
+```
+
+### Golden Test Extensions
+
+```dart
+// Full-app screenshot comparison
+await tester.expectGolden('login_page');
+
+// With custom screen size
+await tester.expectGolden('home_screen', surfaceSize: Size(400, 800));
+
+// Single widget golden
+await tester.expectWidgetGolden(find.byKey(Key('avatar')), 'avatar');
+
+// Screen size helpers for consistent goldens
+await tester.setScreenSize(width: 375, height: 812); // iPhone X
+await tester.resetScreenSize();
+```
+
 ### Finder Extensions
 
 ```dart
-// Finds any ElevatedButton, TextButton, OutlinedButton, FilledButton,
-// or IconButton that contains a Text descendant with the given label.
+// Buttons (any ButtonStyleButton / IconButton with label)
 await tester.tap(find.button('Login'));
+
+// Icons
+tester.expectThat(find.iconWidget(Icons.favorite), matchers: [toBeVisible()]);
+
+// Images by asset name
+tester.expectThat(find.imageAsset('assets/logo.png'), matchers: [toBeVisible()]);
+
+// ListTile by title
+await tester.tap(find.listTile('Settings'));
+
+// Tab by label
+await tester.tap(find.tabWithLabel('Profile'));
+
+// Chip by label
+await tester.tap(find.chip('Flutter'));
+
+// TextField by hint or label text
+await tester.enterText(find.byHintText('Enter email'), 'a@b.com');
+await tester.enterText(find.byLabelText('Password'), 'secret');
 ```
 
 ### Matchers
@@ -151,20 +242,55 @@ await tester.tap(find.button('Login'));
 | State      | `toBeEnabled()`, `toBeDisabled()`, `toBeChecked()`, `toBeUnchecked()`, `toHaveValue(value)` |
 | Content    | `toHaveText(text)`, `toContainText(text)`, `toHaveSemantics(label)` |
 | Layout     | `toHaveSize(size)`, `toBePositioned(x, y)`, `toBeWithin(parent)` |
+| List       | `toHaveItemCount(n)`, `toContainWidget(finder)`, `toBeScrollable()`, `toBeEmptyList()` |
+| Style      | `toHaveOpacity(v)`, `toHaveColor(c)`, `toHaveFontSize(s)`, `toHavePadding(p)`, `toHaveDecoration(d)`, `toHaveBorderRadius(r)`, `toHaveAlignment(a)` |
+| Combinator | `not(matcher)` — negates any matcher |
 
 ### Custom Matchers
 
 Every matcher is just a `typedef WidgetMatcher = void Function(WidgetTester, Finder)`, so writing your own is trivial:
 
 ```dart
-WidgetMatcher toHaveOpacity(double expected) {
+WidgetMatcher toHaveTooltip(String expected) {
   return (tester, finder) {
-    final widget = tester.widget<Opacity>(
-      find.ancestor(of: finder, matching: find.byType(Opacity)),
+    final tooltip = tester.widget<Tooltip>(
+      find.ancestor(of: finder, matching: find.byType(Tooltip)),
     );
-    expect(widget.opacity, expected);
+    expect(tooltip.message, expected);
   };
 }
+```
+
+### ScreenRobot – Page-Object Pattern
+
+Encapsulate per-screen interactions in a reusable robot class:
+
+```dart
+class LoginRobot extends ScreenRobot {
+  LoginRobot(super.tester);
+
+  Finder get emailField => find.byKey(const Key('email'));
+  Finder get passwordField => find.byKey(const Key('password'));
+  Finder get loginButton => find.button('Login');
+
+  Future<void> login(String email, String password) async {
+    await enterTextIn(emailField, email);
+    await enterTextIn(passwordField, password);
+    await tapOn(loginButton);
+  }
+
+  void expectWelcome() {
+    verify(find.text('Welcome'), matchers: [toBeVisible()]);
+  }
+}
+
+// Usage in tests:
+testWidgets('login flow', (tester) async {
+  await tester.pumpWidget(TestApp(child: LoginPage()));
+  final robot = LoginRobot(tester);
+  await robot.login('user@example.com', 'secret');
+  robot.expectWelcome();
+});
 ```
 
 ## License

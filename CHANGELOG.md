@@ -1,3 +1,20 @@
+## 0.1.0
+
+### 🚀 New Features
+
+* **Navigation extensions** – `navigateTo`, `goBack`, `expectRoute`, `expectDialog`, `expectNoDialog`, `expectBottomSheet`, `dismissDialog`, `expectSnackBar`.
+* **Gesture extensions** – `swipeLeft`, `swipeRight`, `swipeUp`, `swipeDown`, `longPressOn`, `doubleTapOn`, `dragSliderTo`, `scrollUntilFound`, `pullToRefresh`.
+* **List/Scrollable matchers** – `toHaveItemCount`, `toContainWidget`, `toBeScrollable`, `toBeEmptyList`.
+* **Style/Visual matchers** – `toHaveOpacity`, `toHaveColor`, `toHaveFontSize`, `toHavePadding`, `toHaveDecoration`, `toHaveBorderRadius`, `toHaveAlignment`.
+* **ScreenRobot** – abstract base class for the page-object/robot pattern.
+* **Golden test extensions** – `expectGolden`, `expectWidgetGolden`, `setScreenSize`, `resetScreenSize`.
+* **`not()` matcher combinator** – negate any matcher for expressive assertions.
+* **Expanded finders** – `find.iconWidget`, `find.imageAsset`, `find.listTile`, `find.tabWithLabel`, `find.dropdown`, `find.chip`, `find.byHintText`, `find.byLabelText`.
+
+### 🔧 Improvements
+
+* Bumped package to `0.1.0` to signal feature-complete v1 preview.
+
 ## 0.0.2
 
 * Initial release.

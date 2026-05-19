@@ -26,3 +26,29 @@ typedef WidgetMatcher = void Function(WidgetTester tester, Finder finder);
 /// ```
 List<WidgetMatcher> allMatchers(List<WidgetMatcher> matchers) => matchers;
 
+/// Negates a [WidgetMatcher]. Passes when the inner matcher **fails**.
+///
+/// ```dart
+/// tester.expectThat(
+///   find.byType(Spinner),
+///   matchers: [not(toBeVisible())],
+/// );
+/// ```
+WidgetMatcher not(WidgetMatcher matcher) {
+  return (WidgetTester tester, Finder finder) {
+    bool passed = false;
+    try {
+      matcher(tester, finder);
+      passed = true;
+    } on TestFailure {
+      // Expected: the inner matcher should fail.
+      return;
+    }
+    if (passed) {
+      throw TestFailure(
+        'Expected matcher to fail, but it passed. '
+        'Use not() only to negate a matcher that would otherwise succeed.',
+      );
+    }
+  };
+}

@@ -29,11 +29,19 @@ export 'src/matchers/visibility_matchers.dart';
 export 'src/matchers/state_matchers.dart';
 export 'src/matchers/content_matchers.dart';
 export 'src/matchers/layout_matchers.dart';
+export 'src/matchers/list_matchers.dart';
+export 'src/matchers/style_matchers.dart';
 
 // Extensions
 export 'src/extensions/widget_tester_expect_extensions.dart';
 export 'src/extensions/widget_tester_form_extensions.dart';
 export 'src/extensions/common_finders_extensions.dart';
+export 'src/extensions/widget_tester_navigation_extensions.dart';
+export 'src/extensions/widget_tester_gesture_extensions.dart';
+export 'src/extensions/widget_tester_golden_extensions.dart';
 
 // Helpers
 export 'src/helpers/field_finders.dart';
+
+// Robots (Page-Object pattern)
+export 'src/robots/screen_robot.dart';
