@@ -1,3 +1,16 @@
+## 0.2.0
+
+### 🚀 New Features
+
+* **Golden path overrides** – `expectGolden` and `expectWidgetGolden` now support custom `goldenPath` values while keeping `goldens/[name].png` as the default.
+
+### 🔧 Improvements
+
+* Hardened finder helpers so documented dropdown, hint, and label lookups behave consistently.
+* Improved dialog dismissal, scroll helpers, golden surface cleanup, list matcher failure messages, and direct hidden-widget visibility checks.
+* Added focused test coverage for navigation, gestures, goldens, list matchers, style matchers, finder helpers, visibility edge cases, and the `not()` matcher.
+* Cleaned package metadata by removing generated template comments from `pubspec.yaml`.
+
 ## 0.1.0
 
 ### 🚀 New Features
