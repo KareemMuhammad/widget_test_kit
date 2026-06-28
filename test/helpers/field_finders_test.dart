@@ -6,16 +6,15 @@ void main() {
   group('FieldFinders', () {
     testWidgets('byKey finds widget with matching Key', (tester) async {
       await tester.pumpWidget(
-        const TestApp(
-          child: TextField(key: Key('username')),
-        ),
+        const TestApp(child: TextField(key: Key('username'))),
       );
 
       expect(FieldFinders.byKey('username'), findsOneWidget);
     });
 
-    testWidgets('byLabel finds TextFormField containing label text',
-        (tester) async {
+    testWidgets('byLabel finds TextFormField containing label text', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         TestApp(
           child: TextFormField(
@@ -27,8 +26,9 @@ void main() {
       expect(FieldFinders.byLabel('Email'), findsOneWidget);
     });
 
-    testWidgets('byHint finds TextField with matching hintText',
-        (tester) async {
+    testWidgets('byHint finds TextField with matching hintText', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const TestApp(
           child: TextField(
@@ -47,10 +47,7 @@ void main() {
         TestApp(
           child: Semantics(
             label: 'close button',
-            child: IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () {},
-            ),
+            child: IconButton(icon: const Icon(Icons.close), onPressed: () {}),
           ),
         ),
       );
@@ -61,4 +58,3 @@ void main() {
     });
   });
 }
-

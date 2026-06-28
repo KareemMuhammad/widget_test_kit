@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'widget_matcher.dart';
 
-/// Asserts that the widget is rendered and not obscured by [Offstage] or
-/// [Visibility] ancestors.
+/// Asserts that the widget is rendered and not obscured by [Offstage],
+/// [Visibility], or zero-[Opacity] widgets.
 ///
 /// ```dart
 /// tester.expectThat(find.text('Hello'), matchers: [toBeVisible()]);
@@ -19,33 +19,11 @@ WidgetMatcher toBeVisible() {
     );
 
     final element = tester.element(finder);
-
-    bool isHidden = false;
-    String? hiddenBy;
-
-    element.visitAncestorElements((ancestor) {
-      final widget = ancestor.widget;
-      if (widget is Offstage && widget.offstage) {
-        isHidden = true;
-        hiddenBy = 'Offstage';
-        return false;
-      }
-      if (widget is Visibility && !widget.visible) {
-        isHidden = true;
-        hiddenBy = 'Visibility';
-        return false;
-      }
-      if (widget is Opacity && widget.opacity == 0) {
-        isHidden = true;
-        hiddenBy = 'Opacity(0)';
-        return false;
-      }
-      return true;
-    });
+    final hiddenBy = _hiddenBy(element);
 
     expect(
-      isHidden,
-      isFalse,
+      hiddenBy,
+      isNull,
       reason:
           'Expected widget to be visible, but it is hidden by a $hiddenBy widget.',
     );
@@ -53,7 +31,7 @@ WidgetMatcher toBeVisible() {
 }
 
 /// Asserts that the widget exists in the tree but is hidden by an [Offstage],
-/// [Visibility], or zero-[Opacity] ancestor.
+/// [Visibility], or zero-[Opacity] widget.
 ///
 /// **Note:** For widgets hidden via [Offstage], the finder must be created
 /// with `skipOffstage: false` (e.g. `find.byKey(key, skipOffstage: false)`).
@@ -76,29 +54,11 @@ WidgetMatcher toBeHidden() {
     );
 
     final element = tester.element(finder);
-
-    bool isHidden = false;
-
-    element.visitAncestorElements((ancestor) {
-      final widget = ancestor.widget;
-      if (widget is Offstage && widget.offstage) {
-        isHidden = true;
-        return false;
-      }
-      if (widget is Visibility && !widget.visible) {
-        isHidden = true;
-        return false;
-      }
-      if (widget is Opacity && widget.opacity == 0) {
-        isHidden = true;
-        return false;
-      }
-      return true;
-    });
+    final hiddenBy = _hiddenBy(element);
 
     expect(
-      isHidden,
-      isTrue,
+      hiddenBy,
+      isNotNull,
       reason:
           'Expected widget to be hidden (Offstage, Visibility, or Opacity), '
           'but it appears to be visible.',
@@ -122,3 +82,21 @@ WidgetMatcher toNotExist() {
   };
 }
 
+String? _hiddenBy(Element element) {
+  final self = _hiddenWidgetName(element.widget);
+  if (self != null) return self;
+
+  String? hiddenBy;
+  element.visitAncestorElements((ancestor) {
+    hiddenBy = _hiddenWidgetName(ancestor.widget);
+    return hiddenBy == null;
+  });
+  return hiddenBy;
+}
+
+String? _hiddenWidgetName(Widget widget) {
+  if (widget is Offstage && widget.offstage) return 'Offstage';
+  if (widget is Visibility && !widget.visible) return 'Visibility';
+  if (widget is Opacity && widget.opacity == 0) return 'Opacity(0)';
+  return null;
+}

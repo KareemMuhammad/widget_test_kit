@@ -5,25 +5,19 @@ import 'package:widget_test_kit/widget_test_kit.dart';
 void main() {
   group('TestApp', () {
     testWidgets('renders child widget', (tester) async {
-      await tester.pumpWidget(
-        const TestApp(child: Text('Hello, World!')),
-      );
+      await tester.pumpWidget(const TestApp(child: Text('Hello, World!')));
 
       expect(find.text('Hello, World!'), findsOneWidget);
     });
 
     testWidgets('wraps child in Scaffold', (tester) async {
-      await tester.pumpWidget(
-        const TestApp(child: Text('Scaffold check')),
-      );
+      await tester.pumpWidget(const TestApp(child: Text('Scaffold check')));
 
       expect(find.byType(Scaffold), findsOneWidget);
     });
 
     testWidgets('wraps child in MaterialApp', (tester) async {
-      await tester.pumpWidget(
-        const TestApp(child: Text('App check')),
-      );
+      await tester.pumpWidget(const TestApp(child: Text('App check')));
 
       expect(find.byType(MaterialApp), findsOneWidget);
     });
@@ -52,24 +46,17 @@ void main() {
 
     testWidgets('applies custom locale', (tester) async {
       await tester.pumpWidget(
-        const TestApp(
-          locale: Locale('en', 'US'),
-          child: SizedBox(),
-        ),
+        const TestApp(locale: Locale('en', 'US'), child: SizedBox()),
       );
 
-      final materialApp =
-          tester.widget<MaterialApp>(find.byType(MaterialApp));
+      final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
       expect(materialApp.locale, const Locale('en', 'US'));
     });
 
     testWidgets('hides debug banner', (tester) async {
-      await tester.pumpWidget(
-        const TestApp(child: SizedBox()),
-      );
+      await tester.pumpWidget(const TestApp(child: SizedBox()));
 
-      final materialApp =
-          tester.widget<MaterialApp>(find.byType(MaterialApp));
+      final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
       expect(materialApp.debugShowCheckedModeBanner, isFalse);
     });
   });
@@ -80,4 +67,3 @@ void main() {
 extension on ColorScheme {
   Color get seed => primary;
 }
-

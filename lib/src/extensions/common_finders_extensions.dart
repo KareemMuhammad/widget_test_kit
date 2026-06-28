@@ -44,7 +44,8 @@ extension CommonFindersExtensions on CommonFinders {
   Finder imageAsset(String assetName) {
     return byWidgetPredicate(
       (widget) =>
-          widget is Image && widget.image is AssetImage &&
+          widget is Image &&
+          widget.image is AssetImage &&
           (widget.image as AssetImage).assetName == assetName,
     );
   }
@@ -55,10 +56,7 @@ extension CommonFindersExtensions on CommonFinders {
   /// await tester.tap(find.listTile('Settings'));
   /// ```
   Finder listTile(String title) {
-    return ancestor(
-      of: text(title),
-      matching: byType(ListTile),
-    );
+    return ancestor(of: text(title), matching: byType(ListTile));
   }
 
   /// Finds a [Tab] widget with the given [label].
@@ -67,10 +65,7 @@ extension CommonFindersExtensions on CommonFinders {
   /// await tester.tap(find.tabWithLabel('Profile'));
   /// ```
   Finder tabWithLabel(String label) {
-    return ancestor(
-      of: text(label),
-      matching: byType(Tab),
-    );
+    return ancestor(of: text(label), matching: byType(Tab));
   }
 
   /// Finds a [DropdownButton] (or [DropdownButtonFormField]) that contains
@@ -80,9 +75,12 @@ extension CommonFindersExtensions on CommonFinders {
   /// await tester.tap(find.dropdown('Country'));
   /// ```
   Finder dropdown(String label) {
-    return byWidgetPredicate(
-      (widget) =>
-          widget is DropdownButton || widget is DropdownButtonFormField,
+    return ancestor(
+      of: text(label),
+      matching: byWidgetPredicate(
+        (widget) =>
+            widget is DropdownButton || widget is DropdownButtonFormField,
+      ),
     );
   }
 
@@ -112,14 +110,7 @@ extension CommonFindersExtensions on CommonFinders {
   /// await tester.enterText(find.byHintText('Enter email'), 'a@b.com');
   /// ```
   Finder byHintText(String hint) {
-    return byWidgetPredicate(
-      (widget) {
-        if (widget is TextField) {
-          return widget.decoration?.hintText == hint;
-        }
-        return false;
-      },
-    );
+    return ancestor(of: text(hint), matching: byType(TextField));
   }
 
   /// Finds a [TextField] or [TextFormField] by its label text.
@@ -128,13 +119,6 @@ extension CommonFindersExtensions on CommonFinders {
   /// await tester.enterText(find.byLabelText('Email'), 'a@b.com');
   /// ```
   Finder byLabelText(String label) {
-    return byWidgetPredicate(
-      (widget) {
-        if (widget is TextField) {
-          return widget.decoration?.labelText == label;
-        }
-        return false;
-      },
-    );
+    return ancestor(of: text(label), matching: byType(TextField));
   }
 }

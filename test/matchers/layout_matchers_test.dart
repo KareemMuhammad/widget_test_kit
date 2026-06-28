@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:widget_test_kit/widget_test_kit.dart';
@@ -10,13 +9,7 @@ void main() {
   group('toHaveSize()', () {
     testWidgets('passes when size matches', (tester) async {
       await tester.pumpWidget(
-        const TestApp(
-          child: SizedBox(
-            key: Key('box'),
-            width: 100,
-            height: 50,
-          ),
-        ),
+        const TestApp(child: SizedBox(key: Key('box'), width: 100, height: 50)),
       );
 
       tester.expectThat(
@@ -27,9 +20,7 @@ void main() {
 
     testWidgets('fails when size does not match', (tester) async {
       await tester.pumpWidget(
-        const TestApp(
-          child: SizedBox(key: Key('box'), width: 100, height: 50),
-        ),
+        const TestApp(child: SizedBox(key: Key('box'), width: 100, height: 50)),
       );
 
       expect(
@@ -78,10 +69,7 @@ void main() {
     testWidgets('passes when widget is inside parent', (tester) async {
       await tester.pumpWidget(
         const TestApp(
-          child: Card(
-            key: Key('card'),
-            child: Text('Inside'),
-          ),
+          child: Card(key: Key('card'), child: Text('Inside')),
         ),
       );
 
@@ -113,4 +101,3 @@ void main() {
     });
   });
 }
-

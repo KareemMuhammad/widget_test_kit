@@ -1,4 +1,3 @@
-
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,8 +15,11 @@ import 'widget_matcher.dart';
 /// ```
 WidgetMatcher toHaveText(String expected) {
   return (WidgetTester tester, Finder finder) {
-    expect(finder, findsOneWidget,
-        reason: 'Expected widget to exist for text check.');
+    expect(
+      finder,
+      findsOneWidget,
+      reason: 'Expected widget to exist for text check.',
+    );
 
     final widget = tester.widget(finder);
 
@@ -55,8 +57,11 @@ WidgetMatcher toHaveText(String expected) {
 /// ```
 WidgetMatcher toContainText(String substring) {
   return (WidgetTester tester, Finder finder) {
-    expect(finder, findsOneWidget,
-        reason: 'Expected widget to exist for text check.');
+    expect(
+      finder,
+      findsOneWidget,
+      reason: 'Expected widget to exist for text check.',
+    );
 
     final widget = tester.widget(finder);
 
@@ -65,8 +70,7 @@ WidgetMatcher toContainText(String substring) {
       expect(
         actual.contains(substring),
         isTrue,
-        reason:
-            'Expected text to contain "$substring" but found "$actual".',
+        reason: 'Expected text to contain "$substring" but found "$actual".',
       );
       return;
     }
@@ -113,8 +117,11 @@ WidgetMatcher toContainText(String substring) {
 /// ```
 WidgetMatcher toHaveSemantics(String label) {
   return (WidgetTester tester, Finder finder) {
-    expect(finder, findsOneWidget,
-        reason: 'Expected widget to exist for semantics check.');
+    expect(
+      finder,
+      findsOneWidget,
+      reason: 'Expected widget to exist for semantics check.',
+    );
 
     late final SemanticsNode semantics;
     try {
@@ -135,5 +142,3 @@ WidgetMatcher toHaveSemantics(String label) {
     );
   };
 }
-
-

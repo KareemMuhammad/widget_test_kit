@@ -13,8 +13,11 @@ import 'widget_matcher.dart';
 /// ```
 WidgetMatcher toBeEnabled() {
   return (WidgetTester tester, Finder finder) {
-    expect(finder, findsOneWidget,
-        reason: 'Expected widget to exist for enabled check.');
+    expect(
+      finder,
+      findsOneWidget,
+      reason: 'Expected widget to exist for enabled check.',
+    );
 
     final widget = tester.widget(finder);
 
@@ -63,8 +66,11 @@ WidgetMatcher toBeEnabled() {
 /// ```
 WidgetMatcher toBeDisabled() {
   return (WidgetTester tester, Finder finder) {
-    expect(finder, findsOneWidget,
-        reason: 'Expected widget to exist for disabled check.');
+    expect(
+      finder,
+      findsOneWidget,
+      reason: 'Expected widget to exist for disabled check.',
+    );
 
     final widget = tester.widget(finder);
 
@@ -112,25 +118,41 @@ WidgetMatcher toBeDisabled() {
 /// ```
 WidgetMatcher toBeChecked() {
   return (WidgetTester tester, Finder finder) {
-    expect(finder, findsOneWidget,
-        reason: 'Expected widget to exist for checked check.');
+    expect(
+      finder,
+      findsOneWidget,
+      reason: 'Expected widget to exist for checked check.',
+    );
 
     final widget = tester.widget(finder);
 
     if (widget is Checkbox) {
-      expect(widget.value, isTrue,
-          reason: 'Expected Checkbox to be checked, but value is ${widget.value}.');
+      expect(
+        widget.value,
+        isTrue,
+        reason:
+            'Expected Checkbox to be checked, but value is ${widget.value}.',
+      );
     } else if (widget is Switch) {
-      expect(widget.value, isTrue,
-          reason: 'Expected Switch to be on, but value is ${widget.value}.');
+      expect(
+        widget.value,
+        isTrue,
+        reason: 'Expected Switch to be on, but value is ${widget.value}.',
+      );
     } else if (widget is CheckboxListTile) {
-      expect(widget.value, isTrue,
-          reason:
-              'Expected CheckboxListTile to be checked, but value is ${widget.value}.');
+      expect(
+        widget.value,
+        isTrue,
+        reason:
+            'Expected CheckboxListTile to be checked, but value is ${widget.value}.',
+      );
     } else if (widget is SwitchListTile) {
-      expect(widget.value, isTrue,
-          reason:
-              'Expected SwitchListTile to be on, but value is ${widget.value}.');
+      expect(
+        widget.value,
+        isTrue,
+        reason:
+            'Expected SwitchListTile to be on, but value is ${widget.value}.',
+      );
     } else {
       fail(
         'toBeChecked() does not support ${widget.runtimeType}. '
@@ -147,25 +169,41 @@ WidgetMatcher toBeChecked() {
 /// ```
 WidgetMatcher toBeUnchecked() {
   return (WidgetTester tester, Finder finder) {
-    expect(finder, findsOneWidget,
-        reason: 'Expected widget to exist for unchecked check.');
+    expect(
+      finder,
+      findsOneWidget,
+      reason: 'Expected widget to exist for unchecked check.',
+    );
 
     final widget = tester.widget(finder);
 
     if (widget is Checkbox) {
-      expect(widget.value, isNot(true),
-          reason: 'Expected Checkbox to be unchecked, but value is ${widget.value}.');
+      expect(
+        widget.value,
+        isNot(true),
+        reason:
+            'Expected Checkbox to be unchecked, but value is ${widget.value}.',
+      );
     } else if (widget is Switch) {
-      expect(widget.value, isFalse,
-          reason: 'Expected Switch to be off, but value is ${widget.value}.');
+      expect(
+        widget.value,
+        isFalse,
+        reason: 'Expected Switch to be off, but value is ${widget.value}.',
+      );
     } else if (widget is CheckboxListTile) {
-      expect(widget.value, isNot(true),
-          reason:
-              'Expected CheckboxListTile to be unchecked, but value is ${widget.value}.');
+      expect(
+        widget.value,
+        isNot(true),
+        reason:
+            'Expected CheckboxListTile to be unchecked, but value is ${widget.value}.',
+      );
     } else if (widget is SwitchListTile) {
-      expect(widget.value, isFalse,
-          reason:
-              'Expected SwitchListTile to be off, but value is ${widget.value}.');
+      expect(
+        widget.value,
+        isFalse,
+        reason:
+            'Expected SwitchListTile to be off, but value is ${widget.value}.',
+      );
     } else {
       fail(
         'toBeUnchecked() does not support ${widget.runtimeType}. '
@@ -185,8 +223,11 @@ WidgetMatcher toBeUnchecked() {
 /// ```
 WidgetMatcher toHaveValue(dynamic expected) {
   return (WidgetTester tester, Finder finder) {
-    expect(finder, findsOneWidget,
-        reason: 'Expected widget to exist for value check.');
+    expect(
+      finder,
+      findsOneWidget,
+      reason: 'Expected widget to exist for value check.',
+    );
 
     final actual = _readFieldValue(tester, finder);
 
@@ -223,4 +264,3 @@ String? _readFieldValue(WidgetTester tester, Finder finder) {
     'or EditableText), but found ${widget.runtimeType}.',
   );
 }
-

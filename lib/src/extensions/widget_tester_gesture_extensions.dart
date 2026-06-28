@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 /// Extensions on [WidgetTester] for gesture and interaction helpers.
 ///
 /// ```dart
@@ -20,6 +21,7 @@ extension WidgetTesterGestureExtensions on WidgetTester {
     await fling(finder, const Offset(-300, 0), velocity);
     await pumpAndSettle();
   }
+
   /// Flings the widget to the **right**.
   ///
   /// ```dart
@@ -29,6 +31,7 @@ extension WidgetTesterGestureExtensions on WidgetTester {
     await fling(finder, const Offset(300, 0), velocity);
     await pumpAndSettle();
   }
+
   /// Flings the widget **up** (e.g. scroll up, dismiss bottom sheet).
   ///
   /// ```dart
@@ -38,6 +41,7 @@ extension WidgetTesterGestureExtensions on WidgetTester {
     await fling(finder, const Offset(0, -300), velocity);
     await pumpAndSettle();
   }
+
   /// Flings the widget **down** (e.g. pull to refresh).
   ///
   /// ```dart
@@ -47,6 +51,7 @@ extension WidgetTesterGestureExtensions on WidgetTester {
     await fling(finder, const Offset(0, 300), velocity);
     await pumpAndSettle();
   }
+
   // ---------------------------------------------------------------------------
   // Tap variants
   // ---------------------------------------------------------------------------
@@ -59,6 +64,7 @@ extension WidgetTesterGestureExtensions on WidgetTester {
     await longPress(finder);
     await pumpAndSettle();
   }
+
   /// Performs a **double tap** on [finder] and pumps.
   ///
   /// ```dart
@@ -70,6 +76,7 @@ extension WidgetTesterGestureExtensions on WidgetTester {
     await tap(finder);
     await pumpAndSettle();
   }
+
   // ---------------------------------------------------------------------------
   // Slider
   // ---------------------------------------------------------------------------
@@ -79,15 +86,20 @@ extension WidgetTesterGestureExtensions on WidgetTester {
   /// await tester.dragSliderTo(find.byType(Slider), 0.75);
   /// ```
   Future<void> dragSliderTo(Finder finder, double value) async {
-    expect(finder, findsOneWidget,
-        reason: 'Expected a Slider widget to exist for dragSliderTo.');
+    expect(
+      finder,
+      findsOneWidget,
+      reason: 'Expected a Slider widget to exist for dragSliderTo.',
+    );
     final sliderRect = getRect(finder);
     final currentCenter = getCenter(finder);
-    final targetX = sliderRect.left + (sliderRect.width * value.clamp(0.0, 1.0));
+    final targetX =
+        sliderRect.left + (sliderRect.width * value.clamp(0.0, 1.0));
     final offset = Offset(targetX - currentCenter.dx, 0);
     await drag(finder, offset);
     await pumpAndSettle();
   }
+
   // ---------------------------------------------------------------------------
   // Scroll helpers
   // ---------------------------------------------------------------------------
@@ -102,15 +114,36 @@ extension WidgetTesterGestureExtensions on WidgetTester {
     double delta = 100,
     int maxScrolls = 50,
   }) async {
-    final scrollableFinder = scrollable ?? find.byType(Scrollable).first;
+    final scrollableFinder = scrollable ?? find.byType(Scrollable).last;
+    final scrollableState = state<ScrollableState>(scrollableFinder);
+
     for (var i = 0; i < maxScrolls; i++) {
-      if (finder.evaluate().isNotEmpty) return;
-      await drag(scrollableFinder, Offset(0, -delta));
+      if (finder.evaluate().isNotEmpty) {
+        await ensureVisible(finder);
+        await pumpAndSettle();
+        return;
+      }
+
+      final position = scrollableState.position;
+      final nextOffset = (position.pixels + delta).clamp(
+        position.minScrollExtent,
+        position.maxScrollExtent,
+      );
+
+      if (nextOffset == position.pixels) break;
+
+      position.jumpTo(nextOffset);
       await pump();
     }
-    expect(finder, findsWidgets,
-        reason: 'scrollUntilFound: widget not found after $maxScrolls scrolls.');
+
+    expect(
+      finder,
+      findsWidgets,
+      reason: 'scrollUntilFound: widget not found after $maxScrolls scrolls.',
+    );
+    await pumpAndSettle();
   }
+
   // ---------------------------------------------------------------------------
   // Pull to refresh
   // ---------------------------------------------------------------------------

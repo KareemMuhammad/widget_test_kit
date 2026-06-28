@@ -14,16 +14,9 @@ void main() {
     });
 
     testWidgets('passes when a descendant Text matches', (tester) async {
-      await tester.pumpWidget(
-        const TestApp(
-          child: Card(child: Text('Title')),
-        ),
-      );
+      await tester.pumpWidget(const TestApp(child: Card(child: Text('Title'))));
 
-      tester.expectThat(
-        find.byType(Card),
-        matchers: [toHaveText('Title')],
-      );
+      tester.expectThat(find.byType(Card), matchers: [toHaveText('Title')]);
     });
 
     testWidgets('fails when text does not match', (tester) async {
@@ -39,9 +32,7 @@ void main() {
     });
 
     testWidgets('fails when no descendant has the text', (tester) async {
-      await tester.pumpWidget(
-        const TestApp(child: Card(child: Text('Other'))),
-      );
+      await tester.pumpWidget(const TestApp(child: Card(child: Text('Other'))));
 
       expect(
         () => tester.expectThat(
@@ -58,9 +49,7 @@ void main() {
   // ---------------------------------------------------------------------------
   group('toContainText()', () {
     testWidgets('passes when Text data contains substring', (tester) async {
-      await tester.pumpWidget(
-        const TestApp(child: Text('Hello, World!')),
-      );
+      await tester.pumpWidget(const TestApp(child: Text('Hello, World!')));
 
       tester.expectThat(
         find.text('Hello, World!'),
@@ -68,12 +57,11 @@ void main() {
       );
     });
 
-    testWidgets('passes when descendant text contains substring',
-        (tester) async {
+    testWidgets('passes when descendant text contains substring', (
+      tester,
+    ) async {
       await tester.pumpWidget(
-        const TestApp(
-          child: Card(child: Text('Registration complete!')),
-        ),
+        const TestApp(child: Card(child: Text('Registration complete!'))),
       );
 
       tester.expectThat(
@@ -107,10 +95,7 @@ void main() {
           child: Semantics(
             key: const Key('close_btn'),
             label: 'Close dialog',
-            child: IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () {},
-            ),
+            child: IconButton(icon: const Icon(Icons.close), onPressed: () {}),
           ),
         ),
       );
@@ -131,10 +116,7 @@ void main() {
           child: Semantics(
             key: const Key('menu_btn'),
             label: 'Open menu',
-            child: IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: () {},
-            ),
+            child: IconButton(icon: const Icon(Icons.menu), onPressed: () {}),
           ),
         ),
       );
@@ -151,4 +133,3 @@ void main() {
     });
   });
 }
-

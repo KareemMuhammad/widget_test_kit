@@ -200,6 +200,9 @@ await tester.expectGolden('login_page');
 // With custom screen size
 await tester.expectGolden('home_screen', surfaceSize: Size(400, 800));
 
+// With custom golden path
+await tester.expectGolden('home_screen', goldenPath: 'screens/home.png');
+
 // Single widget golden
 await tester.expectWidgetGolden(find.byKey(Key('avatar')), 'avatar');
 

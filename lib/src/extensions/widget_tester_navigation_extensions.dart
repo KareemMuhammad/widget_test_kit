@@ -50,7 +50,8 @@ extension WidgetTesterNavigationExtensions on WidgetTester {
     expect(
       currentRoute,
       equals(routeName),
-      reason: 'Expected current route to be "$routeName" but found "$currentRoute".',
+      reason:
+          'Expected current route to be "$routeName" but found "$currentRoute".',
     );
   }
 
@@ -109,8 +110,13 @@ extension WidgetTesterNavigationExtensions on WidgetTester {
   /// await tester.dismissDialog();
   /// ```
   Future<void> dismissDialog() async {
-    // The ModalBarrier is rendered behind the dialog.
-    await tapAt(Offset.zero);
+    final barrier = find
+        .byWidgetPredicate(
+          (widget) => widget is ModalBarrier && widget.dismissible,
+        )
+        .last;
+    final barrierRect = getRect(barrier);
+    await tapAt(barrierRect.topLeft + const Offset(1, 1));
     await pumpAndSettle();
   }
 
@@ -133,9 +139,9 @@ extension WidgetTesterNavigationExtensions on WidgetTester {
           matching: find.text(withText),
         ),
         findsOneWidget,
-        reason: 'Expected SnackBar with text "$withText", but it was not found.',
+        reason:
+            'Expected SnackBar with text "$withText", but it was not found.',
       );
     }
   }
 }
-

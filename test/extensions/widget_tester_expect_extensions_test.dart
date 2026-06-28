@@ -5,35 +5,24 @@ import 'package:widget_test_kit/widget_test_kit.dart';
 void main() {
   group('expectThat', () {
     testWidgets('passes when all matchers pass', (tester) async {
-      await tester.pumpWidget(
-        const TestApp(child: Text('Hello')),
-      );
+      await tester.pumpWidget(const TestApp(child: Text('Hello')));
 
       // Should not throw.
-      tester.expectThat(
-        find.text('Hello'),
-        matchers: [toBeVisible()],
-      );
+      tester.expectThat(find.text('Hello'), matchers: [toBeVisible()]);
     });
 
     testWidgets('fails when any matcher fails', (tester) async {
-      await tester.pumpWidget(
-        const TestApp(child: SizedBox()),
-      );
+      await tester.pumpWidget(const TestApp(child: SizedBox()));
 
       expect(
-        () => tester.expectThat(
-          find.text('Missing'),
-          matchers: [toBeVisible()],
-        ),
+        () =>
+            tester.expectThat(find.text('Missing'), matchers: [toBeVisible()]),
         throwsA(isA<TestFailure>()),
       );
     });
 
     testWidgets('prepends reason to failure message', (tester) async {
-      await tester.pumpWidget(
-        const TestApp(child: SizedBox()),
-      );
+      await tester.pumpWidget(const TestApp(child: SizedBox()));
 
       try {
         tester.expectThat(
@@ -64,32 +53,43 @@ void main() {
 
   group('expectThatSingle', () {
     testWidgets('delegates to expectThat with single matcher', (tester) async {
-      await tester.pumpWidget(
-        const TestApp(child: Text('Hi')),
-      );
+      await tester.pumpWidget(const TestApp(child: Text('Hi')));
 
-      tester.expectThatSingle(
-        find.text('Hi'),
-        matcher: toBeVisible(),
-      );
+      tester.expectThatSingle(find.text('Hi'), matcher: toBeVisible());
     });
   });
 
   group('shouldBe', () {
     testWidgets('is a terse alias for expectThat', (tester) async {
-      await tester.pumpWidget(
-        const TestApp(child: SizedBox()),
-      );
+      await tester.pumpWidget(const TestApp(child: SizedBox()));
 
       tester.shouldBe(find.byType(CircularProgressIndicator), toNotExist());
     });
   });
 
+  group('not()', () {
+    testWidgets('passes when inner matcher fails', (tester) async {
+      await tester.pumpWidget(const TestApp(child: Text('Visible')));
+
+      tester.expectThat(find.text('Visible'), matchers: [not(toBeHidden())]);
+    });
+
+    testWidgets('fails when inner matcher passes', (tester) async {
+      await tester.pumpWidget(const TestApp(child: Text('Visible')));
+
+      expect(
+        () => tester.expectThat(
+          find.text('Visible'),
+          matchers: [not(toBeVisible())],
+        ),
+        throwsA(isA<TestFailure>()),
+      );
+    });
+  });
+
   group('expectThatEventually', () {
     testWidgets('succeeds immediately when matchers pass', (tester) async {
-      await tester.pumpWidget(
-        const TestApp(child: Text('Already here')),
-      );
+      await tester.pumpWidget(const TestApp(child: Text('Already here')));
 
       await tester.expectThatEventually(
         find.text('Already here'),
@@ -99,9 +99,7 @@ void main() {
 
     testWidgets('polls until matchers pass', (tester) async {
       // Widget that shows "Done" after a rebuild triggered by a timer.
-      await tester.pumpWidget(
-        const TestApp(child: _DelayedWidget()),
-      );
+      await tester.pumpWidget(const TestApp(child: _DelayedWidget()));
 
       // "Done" doesn't exist yet.
       expect(find.text('Done'), findsNothing);
@@ -114,9 +112,7 @@ void main() {
     });
 
     testWidgets('throws on timeout', (tester) async {
-      await tester.pumpWidget(
-        const TestApp(child: SizedBox()),
-      );
+      await tester.pumpWidget(const TestApp(child: SizedBox()));
 
       expect(
         () => tester.expectThatEventually(
@@ -163,4 +159,3 @@ class _DelayedWidgetState extends State<_DelayedWidget> {
     return Text(_done ? 'Done' : 'Loading');
   }
 }
-

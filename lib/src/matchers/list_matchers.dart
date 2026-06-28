@@ -12,8 +12,11 @@ import 'widget_matcher.dart';
 /// ```
 WidgetMatcher toHaveItemCount(int expected) {
   return (WidgetTester tester, Finder finder) {
-    expect(finder, findsOneWidget,
-        reason: 'Expected widget to exist for item count check.');
+    expect(
+      finder,
+      findsOneWidget,
+      reason: 'Expected widget to exist for item count check.',
+    );
 
     final widget = tester.widget(finder);
     int? count;
@@ -28,6 +31,13 @@ WidgetMatcher toHaveItemCount(int expected) {
         matching: find.byWidgetPredicate((_) => true),
       );
       count = children.evaluate().length;
+    }
+
+    if (count == null) {
+      fail(
+        'toHaveItemCount() cannot determine the item count for '
+        '${widget.runtimeType}. Builder-backed lists must provide itemCount.',
+      );
     }
 
     expect(
@@ -49,14 +59,18 @@ WidgetMatcher toHaveItemCount(int expected) {
 /// ```
 WidgetMatcher toContainWidget(Finder childFinder) {
   return (WidgetTester tester, Finder finder) {
-    expect(finder, findsOneWidget,
-        reason: 'Expected parent widget to exist for containment check.');
+    expect(
+      finder,
+      findsOneWidget,
+      reason: 'Expected parent widget to exist for containment check.',
+    );
 
     final descendant = find.descendant(of: finder, matching: childFinder);
     expect(
       descendant,
       findsWidgets,
-      reason: 'Expected widget to contain a descendant matching the given finder, '
+      reason:
+          'Expected widget to contain a descendant matching the given finder, '
           'but none was found.',
     );
   };
@@ -69,8 +83,11 @@ WidgetMatcher toContainWidget(Finder childFinder) {
 /// ```
 WidgetMatcher toBeScrollable() {
   return (WidgetTester tester, Finder finder) {
-    expect(finder, findsOneWidget,
-        reason: 'Expected widget to exist for scrollable check.');
+    expect(
+      finder,
+      findsOneWidget,
+      reason: 'Expected widget to exist for scrollable check.',
+    );
 
     final scrollable = find.descendant(
       of: finder,
@@ -95,8 +112,11 @@ WidgetMatcher toBeScrollable() {
 /// ```
 WidgetMatcher toBeEmptyList() {
   return (WidgetTester tester, Finder finder) {
-    expect(finder, findsOneWidget,
-        reason: 'Expected widget to exist for empty check.');
+    expect(
+      finder,
+      findsOneWidget,
+      reason: 'Expected widget to exist for empty check.',
+    );
 
     final widget = tester.widget(finder);
     int? count;
@@ -108,11 +128,16 @@ WidgetMatcher toBeEmptyList() {
     }
 
     if (count != null) {
-      expect(count, equals(0),
-          reason: 'Expected list to be empty but found $count items.');
+      expect(
+        count,
+        equals(0),
+        reason: 'Expected list to be empty but found $count items.',
+      );
     } else {
-      fail('toBeEmptyList() requires a ListView or GridView, '
-          'but found ${widget.runtimeType}.');
+      fail(
+        'toBeEmptyList() requires a ListView or GridView, '
+        'but found ${widget.runtimeType}.',
+      );
     }
   };
 }
