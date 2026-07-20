@@ -16,8 +16,11 @@ import 'widget_matcher.dart';
 /// ```
 WidgetMatcher toHaveSize(Size expected) {
   return (WidgetTester tester, Finder finder) {
-    expect(finder, findsOneWidget,
-        reason: 'Expected widget to exist for size check.');
+    expect(
+      finder,
+      findsOneWidget,
+      reason: 'Expected widget to exist for size check.',
+    );
 
     final actual = tester.getSize(finder);
 
@@ -41,8 +44,11 @@ WidgetMatcher toHaveSize(Size expected) {
 /// ```
 WidgetMatcher toBePositioned(double x, double y) {
   return (WidgetTester tester, Finder finder) {
-    expect(finder, findsOneWidget,
-        reason: 'Expected widget to exist for position check.');
+    expect(
+      finder,
+      findsOneWidget,
+      reason: 'Expected widget to exist for position check.',
+    );
 
     final actual = tester.getTopLeft(finder);
     final expected = Offset(x, y);
@@ -65,10 +71,7 @@ WidgetMatcher toBePositioned(double x, double y) {
 /// ```
 WidgetMatcher toBeWithin(Finder parent) {
   return (WidgetTester tester, Finder finder) {
-    final descendantFinder = find.descendant(
-      of: parent,
-      matching: finder,
-    );
+    final descendantFinder = find.descendant(of: parent, matching: finder);
 
     expect(
       descendantFinder,
@@ -79,4 +82,3 @@ WidgetMatcher toBeWithin(Finder parent) {
     );
   };
 }
-

@@ -5,9 +5,7 @@ import 'package:widget_test_kit/widget_test_kit.dart';
 void main() {
   group('toBeVisible()', () {
     testWidgets('passes for a visible widget', (tester) async {
-      await tester.pumpWidget(
-        const TestApp(child: Text('Hello')),
-      );
+      await tester.pumpWidget(const TestApp(child: Text('Hello')));
 
       tester.expectThat(find.text('Hello'), matchers: [toBeVisible()]);
     });
@@ -16,32 +14,80 @@ void main() {
       await tester.pumpWidget(const TestApp(child: SizedBox()));
 
       expect(
-        () => tester.expectThat(
-          find.text('Missing'),
-          matchers: [toBeVisible()],
-        ),
+        () =>
+            tester.expectThat(find.text('Missing'), matchers: [toBeVisible()]),
         throwsA(isA<TestFailure>()),
       );
     });
 
     testWidgets('fails when widget is inside Opacity(0)', (tester) async {
       await tester.pumpWidget(
-        const TestApp(
-          child: Opacity(opacity: 0, child: Text('Ghost')),
-        ),
+        const TestApp(child: Opacity(opacity: 0, child: Text('Ghost'))),
       );
 
       expect(
-        () => tester.expectThat(
-          find.text('Ghost'),
-          matchers: [toBeVisible()],
-        ),
+        () => tester.expectThat(find.text('Ghost'), matchers: [toBeVisible()]),
         throwsA(isA<TestFailure>()),
       );
     });
 
-    testWidgets('fails when widget is inside Visibility(visible: false) with maintainState',
-        (tester) async {
+    testWidgets('fails when finder is Opacity(0) itself', (tester) async {
+      await tester.pumpWidget(
+        const TestApp(child: Opacity(opacity: 0, child: Text('Ghost'))),
+      );
+
+      expect(
+        () =>
+            tester.expectThat(find.byType(Opacity), matchers: [toBeVisible()]),
+        throwsA(isA<TestFailure>()),
+      );
+    });
+
+    testWidgets(
+      'fails when widget is inside Visibility(visible: false) with maintainState',
+      (tester) async {
+        await tester.pumpWidget(
+          const TestApp(
+            child: Visibility(
+              visible: false,
+              maintainState: true,
+              maintainAnimation: true,
+              maintainSize: true,
+              child: Text('Hidden'),
+            ),
+          ),
+        );
+
+        // Widget exists in tree (maintainState + maintainSize) but is invisible.
+        expect(
+          () =>
+              tester.expectThat(find.text('Hidden'), matchers: [toBeVisible()]),
+          throwsA(isA<TestFailure>()),
+        );
+      },
+    );
+  });
+
+  group('toBeHidden()', () {
+    testWidgets('passes when widget is inside Opacity(0)', (tester) async {
+      await tester.pumpWidget(
+        const TestApp(child: Opacity(opacity: 0, child: Text('Ghost'))),
+      );
+
+      tester.expectThat(find.text('Ghost'), matchers: [toBeHidden()]);
+    });
+
+    testWidgets('passes when finder is Opacity(0) itself', (tester) async {
+      await tester.pumpWidget(
+        const TestApp(child: Opacity(opacity: 0, child: Text('Ghost'))),
+      );
+
+      tester.expectThat(find.byType(Opacity), matchers: [toBeHidden()]);
+    });
+
+    testWidgets('passes when finder is hidden Visibility itself', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const TestApp(
           child: Visibility(
@@ -54,36 +100,31 @@ void main() {
         ),
       );
 
-      // Widget exists in tree (maintainState + maintainSize) but is invisible.
-      expect(
-        () => tester.expectThat(
-          find.text('Hidden'),
-          matchers: [toBeVisible()],
-        ),
-        throwsA(isA<TestFailure>()),
-      );
+      tester.expectThat(find.byType(Visibility), matchers: [toBeHidden()]);
     });
-  });
 
-  group('toBeHidden()', () {
-    testWidgets('passes when widget is inside Opacity(0)', (tester) async {
+    testWidgets('passes when finder is Offstage itself', (tester) async {
       await tester.pumpWidget(
         const TestApp(
-          child: Opacity(opacity: 0, child: Text('Ghost')),
+          child: Offstage(
+            key: Key('hidden_offstage'),
+            offstage: true,
+            child: Text('Hidden'),
+          ),
         ),
       );
 
-      tester.expectThat(find.text('Ghost'), matchers: [toBeHidden()]);
+      tester.expectThat(
+        find.byKey(const Key('hidden_offstage'), skipOffstage: false),
+        matchers: [toBeHidden()],
+      );
     });
 
     testWidgets('fails when widget is fully visible', (tester) async {
       await tester.pumpWidget(const TestApp(child: Text('Visible')));
 
       expect(
-        () => tester.expectThat(
-          find.text('Visible'),
-          matchers: [toBeHidden()],
-        ),
+        () => tester.expectThat(find.text('Visible'), matchers: [toBeHidden()]),
         throwsA(isA<TestFailure>()),
       );
     });
@@ -92,10 +133,7 @@ void main() {
       await tester.pumpWidget(const TestApp(child: SizedBox()));
 
       expect(
-        () => tester.expectThat(
-          find.text('Gone'),
-          matchers: [toBeHidden()],
-        ),
+        () => tester.expectThat(find.text('Gone'), matchers: [toBeHidden()]),
         throwsA(isA<TestFailure>()),
       );
     });
@@ -112,13 +150,9 @@ void main() {
       await tester.pumpWidget(const TestApp(child: Text('Here')));
 
       expect(
-        () => tester.expectThat(
-          find.text('Here'),
-          matchers: [toNotExist()],
-        ),
+        () => tester.expectThat(find.text('Here'), matchers: [toNotExist()]),
         throwsA(isA<TestFailure>()),
       );
     });
   });
 }
-

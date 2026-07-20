@@ -25,10 +25,9 @@ void main() {
     testWidgets('uses custom findField strategy', (tester) async {
       await tester.pumpWidget(const TestApp(child: _SimpleForm()));
 
-      await tester.completeForm(
-        {'Email': 'a@b.com'},
-        findField: (key) => find.widgetWithText(TextFormField, key),
-      );
+      await tester.completeForm({
+        'Email': 'a@b.com',
+      }, findField: (key) => find.widgetWithText(TextFormField, key));
 
       tester.expectThat(
         find.byKey(const Key('email')),
@@ -142,4 +141,3 @@ class _SimpleForm extends StatelessWidget {
     );
   }
 }
-

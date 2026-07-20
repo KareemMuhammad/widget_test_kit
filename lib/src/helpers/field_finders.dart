@@ -25,11 +25,9 @@ class FieldFinders {
 
   /// Finds a [TextField] whose [InputDecoration.hintText] equals [hint].
   static Finder byHint(String hint) => find.byWidgetPredicate(
-        (widget) =>
-            widget is TextField && widget.decoration?.hintText == hint,
-      );
+    (widget) => widget is TextField && widget.decoration?.hintText == hint,
+  );
 
   /// Finds a widget by its accessibility / semantics [label].
   static Finder bySemantics(String label) => find.bySemanticsLabel(label);
 }
-

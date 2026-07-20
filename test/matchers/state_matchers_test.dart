@@ -14,10 +14,7 @@ void main() {
         ),
       );
 
-      tester.expectThat(
-        find.byType(ElevatedButton),
-        matchers: [toBeEnabled()],
-      );
+      tester.expectThat(find.byType(ElevatedButton), matchers: [toBeEnabled()]);
     });
 
     testWidgets('fails for a disabled ElevatedButton', (tester) async {
@@ -37,25 +34,15 @@ void main() {
     });
 
     testWidgets('passes for an enabled TextField', (tester) async {
-      await tester.pumpWidget(
-        const TestApp(child: TextField(enabled: true)),
-      );
+      await tester.pumpWidget(const TestApp(child: TextField(enabled: true)));
 
-      tester.expectThat(
-        find.byType(TextField),
-        matchers: [toBeEnabled()],
-      );
+      tester.expectThat(find.byType(TextField), matchers: [toBeEnabled()]);
     });
 
     testWidgets('passes for an enabled TextFormField', (tester) async {
-      await tester.pumpWidget(
-        TestApp(child: TextFormField(enabled: true)),
-      );
+      await tester.pumpWidget(TestApp(child: TextFormField(enabled: true)));
 
-      tester.expectThat(
-        find.byType(TextFormField),
-        matchers: [toBeEnabled()],
-      );
+      tester.expectThat(find.byType(TextFormField), matchers: [toBeEnabled()]);
     });
   });
 
@@ -90,25 +77,15 @@ void main() {
     });
 
     testWidgets('passes for a disabled TextField', (tester) async {
-      await tester.pumpWidget(
-        const TestApp(child: TextField(enabled: false)),
-      );
+      await tester.pumpWidget(const TestApp(child: TextField(enabled: false)));
 
-      tester.expectThat(
-        find.byType(TextField),
-        matchers: [toBeDisabled()],
-      );
+      tester.expectThat(find.byType(TextField), matchers: [toBeDisabled()]);
     });
 
     testWidgets('passes for a disabled TextFormField', (tester) async {
-      await tester.pumpWidget(
-        TestApp(child: TextFormField(enabled: false)),
-      );
+      await tester.pumpWidget(TestApp(child: TextFormField(enabled: false)));
 
-      tester.expectThat(
-        find.byType(TextFormField),
-        matchers: [toBeDisabled()],
-      );
+      tester.expectThat(find.byType(TextFormField), matchers: [toBeDisabled()]);
     });
   });
 
@@ -121,10 +98,7 @@ void main() {
         TestApp(child: Checkbox(value: true, onChanged: (_) {})),
       );
 
-      tester.expectThat(
-        find.byType(Checkbox),
-        matchers: [toBeChecked()],
-      );
+      tester.expectThat(find.byType(Checkbox), matchers: [toBeChecked()]);
     });
 
     testWidgets('fails for an unchecked Checkbox', (tester) async {
@@ -133,10 +107,8 @@ void main() {
       );
 
       expect(
-        () => tester.expectThat(
-          find.byType(Checkbox),
-          matchers: [toBeChecked()],
-        ),
+        () =>
+            tester.expectThat(find.byType(Checkbox), matchers: [toBeChecked()]),
         throwsA(isA<TestFailure>()),
       );
     });
@@ -146,10 +118,7 @@ void main() {
         TestApp(child: Switch(value: true, onChanged: (_) {})),
       );
 
-      tester.expectThat(
-        find.byType(Switch),
-        matchers: [toBeChecked()],
-      );
+      tester.expectThat(find.byType(Switch), matchers: [toBeChecked()]);
     });
   });
 
@@ -159,10 +128,7 @@ void main() {
         TestApp(child: Checkbox(value: false, onChanged: (_) {})),
       );
 
-      tester.expectThat(
-        find.byType(Checkbox),
-        matchers: [toBeUnchecked()],
-      );
+      tester.expectThat(find.byType(Checkbox), matchers: [toBeUnchecked()]);
     });
 
     testWidgets('fails for a checked Checkbox', (tester) async {
@@ -184,10 +150,7 @@ void main() {
         TestApp(child: Switch(value: false, onChanged: (_) {})),
       );
 
-      tester.expectThat(
-        find.byType(Switch),
-        matchers: [toBeUnchecked()],
-      );
+      tester.expectThat(find.byType(Switch), matchers: [toBeUnchecked()]);
     });
   });
 
@@ -197,9 +160,7 @@ void main() {
   group('toHaveValue()', () {
     testWidgets('passes when TextField has expected value', (tester) async {
       await tester.pumpWidget(
-        const TestApp(
-          child: TextField(key: Key('name')),
-        ),
+        const TestApp(child: TextField(key: Key('name'))),
       );
 
       await tester.enterText(find.byKey(const Key('name')), 'Alice');
@@ -243,4 +204,3 @@ void main() {
     });
   });
 }
-

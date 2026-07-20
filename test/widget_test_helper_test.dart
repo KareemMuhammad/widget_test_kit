@@ -6,7 +6,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:widget_test_kit/widget_test_kit.dart';
 
 void main() {
-  testWidgets('smoke test – package imports and TestApp renders', (tester) async {
+  testWidgets('smoke test – package imports and TestApp renders', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       const TestApp(child: Text('widget_test_kit works!')),
     );
