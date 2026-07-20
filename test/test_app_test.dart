@@ -59,6 +59,23 @@ void main() {
       final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
       expect(materialApp.debugShowCheckedModeBanner, isFalse);
     });
+
+    testWidgets('applies the wrapper around the MaterialApp', (tester) async {
+      await tester.pumpWidget(
+        TestApp(
+          wrapper: (app) => ColoredBox(color: Colors.amber, child: app),
+          child: const Text('Wrapped check'),
+        ),
+      );
+
+      expect(
+        find.byWidgetPredicate(
+          (widget) => widget is ColoredBox && widget.color == Colors.amber,
+        ),
+        findsOneWidget,
+      );
+      expect(find.text('Wrapped check'), findsOneWidget);
+    });
   });
 }
 

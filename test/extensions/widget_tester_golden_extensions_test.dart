@@ -42,4 +42,26 @@ void main() {
       expect(tester.getSize(find.byType(MaterialApp)), defaultSize);
     });
   });
+
+  group('expectGoldenForLocales()', () {
+    testWidgets('pumps the first locale before failing on a missing golden', (
+      tester,
+    ) async {
+      Object? error;
+      try {
+        await tester.expectGoldenForLocales(
+          child: const Text('Hi'),
+          name: 'missing_multi_locale',
+          locales: const [Locale('en'), Locale('ar')],
+        );
+      } catch (e) {
+        error = e;
+      }
+
+      expect(error, isA<TestFailure>());
+
+      final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
+      expect(materialApp.locale, const Locale('en'));
+    });
+  });
 }

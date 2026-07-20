@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../test_app.dart';
+
 /// Extensions on [WidgetTester] for golden (snapshot) testing helpers.
 ///
 /// ```dart
@@ -62,6 +64,36 @@ extension WidgetTesterGoldenExtensions on WidgetTester {
       finder,
       matchesGoldenFile(goldenPath ?? 'goldens/$name.png'),
     );
+  }
+
+  /// Pumps [child] wrapped in [TestApp] once per locale in [locales],
+  /// capturing a golden file named `[name]_<languageCode>.png` for each.
+  ///
+  /// Useful for catching layout breakage (overflow, RTL mirroring, text
+  /// truncation) across localizations in a single call.
+  ///
+  /// ```dart
+  /// await tester.expectGoldenForLocales(
+  ///   child: LoginForm(),
+  ///   name: 'login_form',
+  ///   locales: [Locale('en'), Locale('ar')],
+  /// );
+  /// ```
+  Future<void> expectGoldenForLocales({
+    required Widget child,
+    required String name,
+    required List<Locale> locales,
+    Size? surfaceSize,
+  }) async {
+    for (final locale in locales) {
+      await pumpWidget(
+        TestApp(locale: locale, supportedLocales: locales, child: child),
+      );
+      await expectGolden(
+        '${name}_${locale.languageCode}',
+        surfaceSize: surfaceSize,
+      );
+    }
   }
 
   // ---------------------------------------------------------------------------

@@ -1,0 +1,22 @@
+name: widget_test_kit_example
+description: Example app demonstrating widget_test_kit.
+publish_to: "none"
+version: 1.0.0
+
+environment:
+  sdk: ^3.10.7
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter
+  widget_test_kit:
+    path: ../
+
+flutter:
+  uses-material-design: true

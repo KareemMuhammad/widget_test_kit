@@ -357,3 +357,209 @@ WidgetMatcher toHaveAlignment(AlignmentGeometry expected) {
     }
   };
 }
+
+/// Asserts the widget has the given [expected] elevation.
+///
+/// Works with [Material] and [Card].
+///
+/// ```dart
+/// tester.expectThat(find.byType(Card), matchers: [toHaveElevation(4)]);
+/// ```
+WidgetMatcher toHaveElevation(double expected) {
+  return (WidgetTester tester, Finder finder) {
+    expect(
+      finder,
+      findsOneWidget,
+      reason: 'Expected widget to exist for elevation check.',
+    );
+
+    final widget = tester.widget(finder);
+
+    if (widget is Card) {
+      expect(
+        widget.elevation,
+        moreOrLessEquals(expected),
+        reason: 'Expected elevation $expected but found ${widget.elevation}.',
+      );
+    } else if (widget is Material) {
+      expect(
+        widget.elevation,
+        moreOrLessEquals(expected),
+        reason: 'Expected elevation $expected but found ${widget.elevation}.',
+      );
+    } else {
+      fail(
+        'toHaveElevation() does not support ${widget.runtimeType}. '
+        'Supported: Card, Material.',
+      );
+    }
+  };
+}
+
+/// Asserts a [Container] or [DecoratedBox] has the given [expected] list of
+/// [BoxShadow]s.
+///
+/// ```dart
+/// tester.expectThat(
+///   find.byKey(Key('card')),
+///   matchers: [toHaveBoxShadow([BoxShadow(blurRadius: 4)])],
+/// );
+/// ```
+WidgetMatcher toHaveBoxShadow(List<BoxShadow> expected) {
+  return (WidgetTester tester, Finder finder) {
+    expect(
+      finder,
+      findsOneWidget,
+      reason: 'Expected widget to exist for box shadow check.',
+    );
+
+    final decoration = _decorationOf(tester, finder);
+    if (decoration == null) {
+      fail(
+        'toHaveBoxShadow() requires a Container or DecoratedBox with a '
+        'BoxDecoration.',
+      );
+    }
+
+    expect(
+      decoration.boxShadow,
+      equals(expected),
+      reason: 'Expected boxShadow $expected but found ${decoration.boxShadow}.',
+    );
+  };
+}
+
+/// Asserts a [Container] or [DecoratedBox] has the given [expected]
+/// [Gradient].
+///
+/// ```dart
+/// tester.expectThat(
+///   find.byKey(Key('banner')),
+///   matchers: [toHaveGradient(LinearGradient(colors: [Colors.red, Colors.blue]))],
+/// );
+/// ```
+WidgetMatcher toHaveGradient(Gradient expected) {
+  return (WidgetTester tester, Finder finder) {
+    expect(
+      finder,
+      findsOneWidget,
+      reason: 'Expected widget to exist for gradient check.',
+    );
+
+    final decoration = _decorationOf(tester, finder);
+    if (decoration == null) {
+      fail(
+        'toHaveGradient() requires a Container or DecoratedBox with a '
+        'BoxDecoration.',
+      );
+    }
+
+    expect(
+      decoration.gradient,
+      equals(expected),
+      reason: 'Expected gradient $expected but found ${decoration.gradient}.',
+    );
+  };
+}
+
+BoxDecoration? _decorationOf(WidgetTester tester, Finder finder) {
+  final widget = tester.widget(finder);
+  final decoration = widget is Container
+      ? widget.decoration
+      : widget is DecoratedBox
+      ? widget.decoration
+      : null;
+  return decoration is BoxDecoration ? decoration : null;
+}
+
+/// Asserts a [Text] widget has the given [expected] [TextAlign].
+///
+/// ```dart
+/// tester.expectThat(find.text('Title'), matchers: [toHaveTextAlign(TextAlign.center)]);
+/// ```
+WidgetMatcher toHaveTextAlign(TextAlign expected) {
+  return (WidgetTester tester, Finder finder) {
+    expect(
+      finder,
+      findsOneWidget,
+      reason: 'Expected widget to exist for text align check.',
+    );
+
+    final widget = tester.widget(finder);
+
+    if (widget is Text) {
+      expect(
+        widget.textAlign,
+        equals(expected),
+        reason: 'Expected textAlign $expected but found ${widget.textAlign}.',
+      );
+    } else {
+      fail(
+        'toHaveTextAlign() requires a Text widget, '
+        'but found ${widget.runtimeType}.',
+      );
+    }
+  };
+}
+
+/// Asserts a [Text] widget has the given [expected] [FontWeight].
+///
+/// ```dart
+/// tester.expectThat(find.text('Title'), matchers: [toHaveFontWeight(FontWeight.bold)]);
+/// ```
+WidgetMatcher toHaveFontWeight(FontWeight expected) {
+  return (WidgetTester tester, Finder finder) {
+    expect(
+      finder,
+      findsOneWidget,
+      reason: 'Expected widget to exist for font weight check.',
+    );
+
+    final widget = tester.widget(finder);
+
+    if (widget is Text) {
+      expect(
+        widget.style?.fontWeight,
+        equals(expected),
+        reason:
+            'Expected fontWeight $expected but found '
+            '${widget.style?.fontWeight}.',
+      );
+    } else {
+      fail(
+        'toHaveFontWeight() requires a Text widget, '
+        'but found ${widget.runtimeType}.',
+      );
+    }
+  };
+}
+
+/// Asserts a [Text] widget has the given [expected] `maxLines`.
+///
+/// ```dart
+/// tester.expectThat(find.text('Bio'), matchers: [toHaveMaxLines(2)]);
+/// ```
+WidgetMatcher toHaveMaxLines(int expected) {
+  return (WidgetTester tester, Finder finder) {
+    expect(
+      finder,
+      findsOneWidget,
+      reason: 'Expected widget to exist for maxLines check.',
+    );
+
+    final widget = tester.widget(finder);
+
+    if (widget is Text) {
+      expect(
+        widget.maxLines,
+        equals(expected),
+        reason: 'Expected maxLines $expected but found ${widget.maxLines}.',
+      );
+    } else {
+      fail(
+        'toHaveMaxLines() requires a Text widget, '
+        'but found ${widget.runtimeType}.',
+      );
+    }
+  };
+}
