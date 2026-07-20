@@ -39,6 +39,20 @@ class TestApp extends StatelessWidget {
   /// Named routes forwarded to [MaterialApp].
   final Map<String, WidgetBuilder>? routes;
 
+  /// Optional outer wrapper applied around the [MaterialApp], e.g. to inject
+  /// a `ProviderScope`, `BlocProvider`, or other inherited state without this
+  /// package depending on any state-management library directly.
+  ///
+  /// ```dart
+  /// await tester.pumpWidget(
+  ///   TestApp(
+  ///     wrapper: (app) => ProviderScope(child: app),
+  ///     child: LoginForm(),
+  ///   ),
+  /// );
+  /// ```
+  final Widget Function(Widget app)? wrapper;
+
   /// Creates a [TestApp] wrapping [child].
   const TestApp({
     super.key,
@@ -50,11 +64,12 @@ class TestApp extends StatelessWidget {
     this.localizationsDelegates,
     this.navigatorObservers,
     this.routes,
+    this.wrapper,
   });
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    final app = MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: theme,
       darkTheme: darkTheme,
@@ -65,5 +80,7 @@ class TestApp extends StatelessWidget {
       routes: routes ?? const {},
       home: Scaffold(body: child),
     );
+
+    return wrapper?.call(app) ?? app;
   }
 }

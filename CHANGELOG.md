@@ -1,3 +1,20 @@
+## 0.3.0
+
+### 🚀 New Features
+
+* **Accessibility extensions** – `expectMeetsTapTargetGuideline`, `expectMeetsTextContrastGuideline`, `expectMeetsLabeledTapTargetGuideline`, and the aggregate `expectMeetsAccessibilityGuidelines` wrap Flutter's built-in accessibility guideline checks into single-call assertions.
+* **Network image mocking** – `mockNetworkImages()` intercepts `Image.network`/`NetworkImage` requests with an in-memory placeholder so widget and golden tests no longer fail or hang without real network access.
+* **`TestApp.wrapper`** – inject `ProviderScope`, `BlocProvider`, or any other ancestor widget around the `MaterialApp` without this package depending on a state-management library.
+* **Multi-locale goldens** – `expectGoldenForLocales()` pumps a widget once per locale and captures a golden per locale, for catching RTL/overflow/truncation regressions.
+* **More style matchers** – `toHaveElevation`, `toHaveBoxShadow`, `toHaveGradient`, `toHaveTextAlign`, `toHaveFontWeight`, `toHaveMaxLines`.
+
+### 🔧 Improvements
+
+* Added a runnable `example/` app with widget tests demonstrating forms, gestures, the robot pattern, accessibility, and network image mocking.
+* Added a GitHub Actions CI workflow running formatting, analysis, and tests for both the package and the example app.
+* Enabled `public_member_api_docs` and additional lints in `analysis_options.yaml`.
+* Fixed `.gitignore` build/coverage patterns so nested packages (like `example/`) don't leak build artifacts into the published package.
+
 ## 0.2.0
 
 ### 🚀 New Features

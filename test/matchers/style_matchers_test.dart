@@ -95,6 +95,87 @@ void main() {
       );
     });
 
+    testWidgets('toHaveElevation matches Card elevation', (tester) async {
+      await tester.pumpWidget(
+        const TestApp(child: Card(elevation: 6, child: Text('Card'))),
+      );
+
+      tester.expectThat(find.byType(Card), matchers: [toHaveElevation(6)]);
+    });
+
+    testWidgets('toHaveBoxShadow matches DecoratedBox boxShadow', (
+      tester,
+    ) async {
+      const shadow = [BoxShadow(blurRadius: 4)];
+
+      await tester.pumpWidget(
+        const TestApp(
+          child: DecoratedBox(
+            decoration: BoxDecoration(boxShadow: shadow),
+            child: SizedBox(width: 20, height: 20),
+          ),
+        ),
+      );
+
+      tester.expectThat(
+        find.byType(DecoratedBox),
+        matchers: [toHaveBoxShadow(shadow)],
+      );
+    });
+
+    testWidgets('toHaveGradient matches Container gradient', (tester) async {
+      const gradient = LinearGradient(colors: [Colors.red, Colors.blue]);
+
+      await tester.pumpWidget(
+        TestApp(
+          child: Container(
+            decoration: const BoxDecoration(gradient: gradient),
+            child: const SizedBox(width: 20, height: 20),
+          ),
+        ),
+      );
+
+      tester.expectThat(
+        find.byType(Container),
+        matchers: [toHaveGradient(gradient)],
+      );
+    });
+
+    testWidgets('toHaveTextAlign matches Text alignment', (tester) async {
+      await tester.pumpWidget(
+        const TestApp(child: Text('Centered', textAlign: TextAlign.center)),
+      );
+
+      tester.expectThat(
+        find.text('Centered'),
+        matchers: [toHaveTextAlign(TextAlign.center)],
+      );
+    });
+
+    testWidgets('toHaveFontWeight matches Text style', (tester) async {
+      await tester.pumpWidget(
+        const TestApp(
+          child: Text('Bold', style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
+      );
+
+      tester.expectThat(
+        find.text('Bold'),
+        matchers: [toHaveFontWeight(FontWeight.bold)],
+      );
+    });
+
+    testWidgets('toHaveMaxLines matches Text maxLines', (tester) async {
+      await tester.pumpWidget(
+        const TestApp(child: Text('Two lines max', maxLines: 2)),
+      );
+
+      tester.expectThat(
+        find.text('Two lines max'),
+        matchers: [toHaveMaxLines(2)],
+      );
+    });
+
     testWidgets('unsupported widgets fail clearly', (tester) async {
       await tester.pumpWidget(const TestApp(child: SizedBox()));
 

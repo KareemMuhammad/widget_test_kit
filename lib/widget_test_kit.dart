@@ -39,9 +39,11 @@ export 'src/extensions/common_finders_extensions.dart';
 export 'src/extensions/widget_tester_navigation_extensions.dart';
 export 'src/extensions/widget_tester_gesture_extensions.dart';
 export 'src/extensions/widget_tester_golden_extensions.dart';
+export 'src/extensions/widget_tester_accessibility_extensions.dart';
 
 // Helpers
 export 'src/helpers/field_finders.dart';
+export 'src/helpers/network_image_mock.dart';
 
 // Robots (Page-Object pattern)
 export 'src/robots/screen_robot.dart';

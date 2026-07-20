@@ -1,5 +1,9 @@
 # widget_test_kit
 
+[![pub package](https://img.shields.io/pub/v/widget_test_kit.svg)](https://pub.dev/packages/widget_test_kit)
+[![CI](https://github.com/KareemMuhammad/widget_test_kit/actions/workflows/ci.yml/badge.svg)](https://github.com/KareemMuhammad/widget_test_kit/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 Declarative, readable widget-testing helpers for Flutter.
 
 Replace verbose, repetitive widget-test boilerplate with a high-level API that reads like a specification.
@@ -52,7 +56,7 @@ Add the package to your `dev_dependencies`:
 
 ```yaml
 dev_dependencies:
-  widget_test_kit: ^0.1.0
+  widget_test_kit: ^0.3.0
 ```
 
 Then import:
@@ -73,6 +77,17 @@ await tester.pumpWidget(
     child: MyWidget(),
     theme: ThemeData.dark(),          // optional
     locale: const Locale('en', 'US'), // optional
+  ),
+);
+```
+
+Need to inject `ProviderScope`, `BlocProvider`, or other ancestor state without this package depending on any state-management library? Use `wrapper`:
+
+```dart
+await tester.pumpWidget(
+  TestApp(
+    wrapper: (app) => ProviderScope(child: app),
+    child: MyWidget(),
   ),
 );
 ```
@@ -209,6 +224,38 @@ await tester.expectWidgetGolden(find.byKey(Key('avatar')), 'avatar');
 // Screen size helpers for consistent goldens
 await tester.setScreenSize(width: 375, height: 812); // iPhone X
 await tester.resetScreenSize();
+
+// Capture a golden per locale — great for catching RTL/overflow regressions
+await tester.expectGoldenForLocales(
+  child: LoginForm(),
+  name: 'login_form',
+  locales: [Locale('en'), Locale('ar')],
+);
+```
+
+### Network Image Mocking
+
+`Image.network` normally fails or hangs in widget tests since there's no real network access. Wrap the relevant pump/expect calls in `mockNetworkImages` instead of hand-writing an `HttpOverrides` mock:
+
+```dart
+await mockNetworkImages(() async {
+  await tester.pumpWidget(TestApp(child: ProfileAvatar()));
+  await tester.expectGolden('profile_avatar');
+});
+```
+
+### Accessibility Extensions
+
+Flutter ships built-in accessibility guideline checks, but they require manually managing a `SemanticsHandle`. These extensions wrap them into single-call assertions:
+
+```dart
+// Runs tap-target-size, text-contrast, and labeled-tap-target checks together
+await tester.expectMeetsAccessibilityGuidelines();
+
+// Or run an individual guideline
+await tester.expectMeetsTapTargetGuideline(platform: TargetPlatform.iOS);
+await tester.expectMeetsTextContrastGuideline();
+await tester.expectMeetsLabeledTapTargetGuideline();
 ```
 
 ### Finder Extensions
@@ -246,7 +293,7 @@ await tester.enterText(find.byLabelText('Password'), 'secret');
 | Content    | `toHaveText(text)`, `toContainText(text)`, `toHaveSemantics(label)` |
 | Layout     | `toHaveSize(size)`, `toBePositioned(x, y)`, `toBeWithin(parent)` |
 | List       | `toHaveItemCount(n)`, `toContainWidget(finder)`, `toBeScrollable()`, `toBeEmptyList()` |
-| Style      | `toHaveOpacity(v)`, `toHaveColor(c)`, `toHaveFontSize(s)`, `toHavePadding(p)`, `toHaveDecoration(d)`, `toHaveBorderRadius(r)`, `toHaveAlignment(a)` |
+| Style      | `toHaveOpacity(v)`, `toHaveColor(c)`, `toHaveFontSize(s)`, `toHavePadding(p)`, `toHaveDecoration(d)`, `toHaveBorderRadius(r)`, `toHaveAlignment(a)`, `toHaveElevation(e)`, `toHaveBoxShadow(s)`, `toHaveGradient(g)`, `toHaveTextAlign(a)`, `toHaveFontWeight(w)`, `toHaveMaxLines(n)` |
 | Combinator | `not(matcher)` — negates any matcher |
 
 ### Custom Matchers
@@ -295,6 +342,11 @@ testWidgets('login flow', (tester) async {
   robot.expectWelcome();
 });
 ```
+
+## Example
+
+See [`example/`](example) for a full runnable app and widget tests covering forms, the robot
+pattern, network image mocking, and accessibility assertions.
 
 ## License
 
